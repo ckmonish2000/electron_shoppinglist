@@ -82,6 +82,9 @@ if (process.env.NODE_ENV !== "production ") {
           focusedWindow.toggleDevTools();
         },
       },
+      {
+        role: "reload",
+      },
     ],
   });
 }
