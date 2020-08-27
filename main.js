@@ -65,6 +65,9 @@ const MainmenuTemplate = [
       },
       {
         label: "Clear Items",
+        click() {
+          mainwindow.webContents.send("clear");
+        },
       },
       {
         label: "quit",
