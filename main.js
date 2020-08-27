@@ -1,6 +1,7 @@
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
+const { platform } = require("os");
 const { app, BrowserWindow, Menu } = electron;
 
 let mainwindow;
@@ -22,7 +23,7 @@ app.on("ready", () => {
 });
 
 function createAddScreen() {
-  addWindow = new BrowserWindow({ width: 200, height: 200 });
+  addWindow = new BrowserWindow({ width: 300, height: 200 });
   addWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "/screens/add.htm"),
@@ -30,6 +31,9 @@ function createAddScreen() {
       slashes: true,
     })
   );
+  addWindow.on("close", () => {
+    addWindow = null;
+  });
 }
 
 const MainmenuTemplate = [
@@ -57,6 +61,27 @@ const MainmenuTemplate = [
 ];
 
 app.on("close", () => {
-  mainwindow = null;
-  addWindow = null;
+  app.quit();
 });
+
+if (process.platform == "darwin") {
+  MainmenuTemplate.unshift({});
+}
+
+if (process.env.NODE_ENV !== "production ") {
+  MainmenuTemplate.push({
+    label: "view",
+    submenu: [
+      {
+        label: "Toggle DevTools",
+        accelerator:
+          (process.platform == platform.platform) !== "darwin"
+            ? "Ctrl+I"
+            : "Command+I",
+        click(error, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        },
+      },
+    ],
+  });
+}
