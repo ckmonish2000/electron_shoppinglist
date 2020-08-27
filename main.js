@@ -15,7 +15,34 @@ app.on("ready", () => {
       slashes: true,
     })
   );
+
+  const mainmenu = Menu.buildFromTemplate(MainmenuTemplate);
+
+  Menu.setApplicationMenu(mainmenu);
 });
+
+const MainmenuTemplate = [
+  {
+    label: "File",
+    submenu: [
+      {
+        label: "Add Items",
+        click() {
+          console.log("fucker");
+        },
+      },
+      {
+        label: "Clear Items",
+      },
+      {
+        label: "quit",
+        click() {
+          app.quit();
+        },
+      },
+    ],
+  },
+];
 
 app.on("close", () => {
   mainwindow = null;
