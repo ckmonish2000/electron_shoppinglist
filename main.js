@@ -2,13 +2,18 @@ const electron = require("electron");
 const url = require("url");
 const path = require("path");
 const { platform } = require("os");
-const { app, BrowserWindow, Menu } = electron;
+
+const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 let mainwindow;
 let addWindow;
 
 app.on("ready", () => {
-  mainwindow = new BrowserWindow();
+  mainwindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
   mainwindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "/screens/index.htm"),
@@ -23,7 +28,13 @@ app.on("ready", () => {
 });
 
 function createAddScreen() {
-  addWindow = new BrowserWindow({ width: 300, height: 200 });
+  addWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
   addWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "/screens/add.htm"),
@@ -35,6 +46,12 @@ function createAddScreen() {
     addWindow = null;
   });
 }
+
+ipcMain.on("item:add", (e, item) => {
+  console.log(item);
+  mainwindow.webContents.send("item:add", item);
+  addWindow.close();
+});
 
 const MainmenuTemplate = [
   {
