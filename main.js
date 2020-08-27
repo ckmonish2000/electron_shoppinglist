@@ -21,6 +21,17 @@ app.on("ready", () => {
   Menu.setApplicationMenu(mainmenu);
 });
 
+function createAddScreen() {
+  addWindow = new BrowserWindow({ width: 200, height: 200 });
+  addWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "/screens/add.htm"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+}
+
 const MainmenuTemplate = [
   {
     label: "File",
@@ -28,7 +39,7 @@ const MainmenuTemplate = [
       {
         label: "Add Items",
         click() {
-          console.log("fucker");
+          createAddScreen();
         },
       },
       {
@@ -39,6 +50,7 @@ const MainmenuTemplate = [
         click() {
           app.quit();
         },
+        accelerator: process.platform == "darwin" ? "Command+Q" : "Ctrl+Q",
       },
     ],
   },
@@ -46,4 +58,5 @@ const MainmenuTemplate = [
 
 app.on("close", () => {
   mainwindow = null;
+  addWindow = null;
 });
